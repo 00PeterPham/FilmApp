@@ -2,6 +2,7 @@ import React from 'react';
 import './InfoModal.scss';
 import FilmsByActor from '../FilmsByActor/FilmsByActor';
 import FilmCast from '../FilmCast/FilmCast';
+import Loading from '../Loading/Loading';
 
 export default class InfoModal extends React.Component {
   constructor(props){
@@ -10,8 +11,10 @@ export default class InfoModal extends React.Component {
     this.state = {
       selected_actor: null,
       filmsByActorData: null,
+      filmsByActor_isLoading: false,
     }
   }
+
   getRelatedFilms = (evt) => {
     const person_id = evt.target.getAttribute('person_id');
 
@@ -29,6 +32,7 @@ export default class InfoModal extends React.Component {
       this.setState({
         ...this.state,
         filmsByActorData, 
+        filmsByActor_isLoading: false,
       })
     })
   }
@@ -38,6 +42,8 @@ export default class InfoModal extends React.Component {
     this.setState({
       ...this.state,
       selected_actor,
+      filmsByActorData: null,
+      filmsByActor_isLoading: true,
     })
   }
   actorClicked = (evt) => {
@@ -45,12 +51,13 @@ export default class InfoModal extends React.Component {
     this.setSelectedActor(evt);
   }
 
-
   render(){
     const { modalInfo, closeModal, cast } = this.props;
-    const { selected_actor, filmsByActorData } = this.state;
+    const { selected_actor, filmsByActorData, filmsByActor_isLoading } = this.state;
     const { id, title, overview, genres, tagline, runtime } = modalInfo;
     const genresList = [];
+
+    console.log(modalInfo);
 
     genres.map((genre) => {
       genresList.push(`${genre.name}, `);
@@ -64,9 +71,14 @@ export default class InfoModal extends React.Component {
           <h2 className="info-text"><label>Title:</label><span>{title}</span></h2>
           <div className="info-text"><label>Description:</label><span>{overview}</span></div>
           <div className="info-text"><label>Genres:</label><span>{genresList}</span></div>
-          <div className="info-text"><label>Tag Line:</label><span>{tagline}</span></div>
-          <div className="info-text"><label>RunTime:</label><span>{runtime} min</span></div>
+          <div className="info-text"><label>Tag Line:</label><span>{tagline || "N/A"}</span></div>
+          <div className="info-text"><label>RunTime:</label><span>{runtime || "N/A"} min</span></div>
           <FilmCast cast={cast} actorClicked={this.actorClicked}/>
+          {
+            filmsByActor_isLoading ? 
+            <Loading />
+            : null
+          }
           {
             selected_actor ? 
             <FilmsByActor 

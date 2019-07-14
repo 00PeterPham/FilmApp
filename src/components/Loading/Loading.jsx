@@ -1,9 +1,10 @@
 import React from 'react';
+import loading_img from '../../imgs/loading.gif';
 import './Loading.scss';
 
 const Loading = () => {
   return(
-    <img alt="loading" className="loading-gif" src="https://media.giphy.com/media/rFrMBUUuKs22Y/giphy.gif" />
+    <img alt="loading" className="loading-gif" src={loading_img} />
   )
 }
 
