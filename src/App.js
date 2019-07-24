@@ -12,7 +12,14 @@ export default class App extends React.Component {
       data: null,
       isLoading: true,
       filmsByReleaseData: null,
-      modalInfo: null,
+      modalInfo: {
+        id: null, 
+        title: null, 
+        overview: null, 
+        genres: null, 
+        tagline: undefined, 
+        runtime: null,
+      },
       cast: null,
       isModalLoading: false,
     }
@@ -91,7 +98,8 @@ export default class App extends React.Component {
   }
 
   render(){
-    const { isLoading, filmsByReleaseDate, modalInfo, cast, isModalLoading } = this.state;
+    const { isLoading, filmsByReleaseDate, cast, isModalLoading } = this.state;
+    const { id, title, overview, genres, tagline, runtime } = this.state.modalInfo;
  
     if(isLoading){
       return <Loading />;
@@ -112,7 +120,12 @@ export default class App extends React.Component {
           cast ? 
           <InfoModal 
             closeModal={this.closeModal} 
-            modalInfo={modalInfo} 
+            id={id}
+            title={title} 
+            overview={overview}
+            genres={genres} 
+            tagline={tagline || undefined} //If trying to use defaultProps (in InfoModal), and database is return null add ' || undfeind ' when passing prop
+            runtime={runtime || undefined} 
             cast={cast}
           /> 
           : null
